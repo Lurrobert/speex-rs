@@ -43,8 +43,7 @@ impl SpeexHeader {
 
     pub unsafe fn from_packet(packet: &mut [u8]) -> Self {
         let backing = unsafe {
-            let ptr = packet.as_mut_ptr() as *mut i8; // Cast to *mut i8
-            let ptr = ptr as *mut u8; // Then cast to *mut u8
+            let ptr = packet.as_mut_ptr(); // No need to cast, as it's already *mut u8
             let length = packet.len() as i32;
             let header_ptr = speex_sys::speex_packet_to_header(ptr, length);
             let derefed = *header_ptr;
@@ -53,6 +52,7 @@ impl SpeexHeader {
         };
         Self { backing }
     }
+
 
     pub unsafe fn make_packet(&mut self) -> Vec<u8> {
         let ptr = &mut self.backing as *mut SysHeader;
