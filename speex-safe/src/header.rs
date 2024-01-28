@@ -45,7 +45,7 @@ impl SpeexHeader {
         let backing = unsafe {
             let ptr = packet.as_mut_ptr() as *mut u8;
             let length = packet.len() as i32;
-            let header_ptr = speex_sys::speex_packet_to_header(ptr as *mut i8, length);
+            let header_ptr = speex_sys::speex_packet_to_header(ptr, length);
             let derefed = *header_ptr;
             speex_sys::speex_header_free(header_ptr as *mut std::ffi::c_void);
             derefed
